@@ -65,7 +65,7 @@ const edit = (props) => {
         title: item.trackName,
         url: item.trackViewUrl,
         artist: item.artistName,
-        artworkUrl: item.artworkUrl100 || item.artworkUrl512 || item.artworkUrl60
+        artworkUrl: item.artworkUrl100 || item.artworkUrl512 || item.artworkUrl60 || item.artworkUrl30
       }
     })
     console.log('clicked')
@@ -114,7 +114,7 @@ const edit = (props) => {
     } else {
       console.log('fetchしませんでした')
     }
-  }, [term])
+  }, [term, entity])
 
   return (
     <div { ...blockProps }>
