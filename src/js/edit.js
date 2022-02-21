@@ -1,6 +1,7 @@
-const { useBlockProps, PlainText } = wp.blockEditor
-const { useState, useEffect, useMemo, useCallback, memo } = wp.element
-
+const { useBlockProps, PlainText, InspectorControls } = wp.blockEditor
+const { useState, useEffect, useCallback, memo } = wp.element
+const { Button, PanelBody, SelectControl } = wp.components
+console.log(wp.components)
 // PHPから取得した変数
 // eslint-disable-next-line no-undef
 const { api, action, nonce } = wpalbAjaxValues
@@ -13,12 +14,13 @@ const edit = (props) => {
   const [term, setTerm] = useState('')
   const [tempTerm, setTempTerm] = useState('')
   const [result, setResult] = useState({})
+  const [entity, setEntity] = useState('software')
 
   const fetchData = async () => {
     const searchParams = new URLSearchParams()
     searchParams.append('country', 'JP')
     searchParams.append('lang', 'ja_JP')
-    searchParams.append('entity', 'software')
+    searchParams.append('entity', entity)
     searchParams.append('term', term)
     searchParams.append('limit', '10')
     searchParams.append('at', '11l64V')
@@ -29,9 +31,14 @@ const edit = (props) => {
     params.append('nonce', nonce)
     params.append('url', url)
 
-    const res = await fetch(api, { method: 'post', body: params })
-    const result = await res.json()
-    await setResult(result)
+    try {
+      const res = await fetch(api, { method: 'post', body: params })
+      const result = await res.json()
+      await setResult(result)
+      console.log(url)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const onKeyPress = (e) => {
@@ -53,17 +60,15 @@ const edit = (props) => {
   }
 
   const onClickAppButton = useCallback((item) => {
-    console.log('clicked')
-    // useEffect(() => {
     setAttributes({
       app: {
         title: item.trackName,
         url: item.trackViewUrl,
         artist: item.artistName,
-        artwork: item.artworkUrl100
+        artworkUrl: item.artworkUrl100 || item.artworkUrl512 || item.artworkUrl60
       }
     })
-    // }, [])
+    console.log('clicked')
   })
 
   const ResultApp = memo(() => {
@@ -114,6 +119,62 @@ const edit = (props) => {
   return (
     <div { ...blockProps }>
       <div className='wp-block-merihari-blogcard-url'>
+        <SelectControl
+          label="選べ"
+          value={entity}
+          onChange={ (value) => setEntity(value) }
+          options={ [
+            {
+              value: 'software',
+              label: 'iPhone App'
+            },
+            {
+              value: 'iPadSoftware',
+              label: 'iPad App'
+            },
+            {
+              value: 'macSoftware',
+              label: 'Mac App'
+            },
+            {
+              value: 'movie',
+              label: 'ムービー'
+            },
+            {
+              value: 'audiobook',
+              label: 'AudioBook'
+            },
+            {
+              value: 'podcast',
+              label: 'Podcast'
+            },
+            {
+              value: 'tvEpisode',
+              label: 'TV Episode'
+            },
+            {
+              value: 'ebook',
+              label: 'ブック'
+            },
+            {
+              value: 'musicArtist',
+              label: '音楽アーティスト'
+            },
+            {
+              value: 'musicTrack',
+              label: '音楽トラック'
+            },
+            {
+              value: 'album',
+              label: '音楽アルバム'
+            },
+            {
+              value: 'musicVideo',
+              label: 'ミュージックビデオ'
+            }
+          ] }
+        />
+
         <PlainText
         className='wp-block-merihari-blogcard-input'
         tagName='input'
