@@ -22,7 +22,10 @@ module.exports = {
   rules: {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-indent': [2, 2]
+    'react/jsx-indent': [2, 2],
+    'react/jsx-no-target-blank': [2, {
+      allowReferrer: true
+    }]
   },
   globals: {
     wp: 'readonly'
