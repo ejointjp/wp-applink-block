@@ -1,3 +1,38 @@
-.test {
-  color: white;
+@tailwind components;
+@tailwind utilities;
+
+.wpalb {
+  @apply bg-slate-200/50 p-4 rounded-md;
+
+  &-link {
+    @apply flex items-center text-inherit hover:text-inherit;
+  }
+
+  &-content {
+    @apply mr-auto;
+  }
+
+  &-icon {
+    @apply w-16 flex-shrink-0 mr-4;
+  }
+
+  &-img {
+    @apply rounded-md border border-solid border-slate-100;
+
+    .wpalb-app & {
+      border-radius: 24%;
+    }
+  }
+
+  &-title {
+    @apply font-semibold;
+  }
+
+  &-artist {
+    @apply mt-0.5 text-sm text-gray-500;
+  }
+
+  &-button {
+    @apply text-sm rounded-full bg-slate-700 text-white py-2 px-4;
+  }
 }

@@ -31,6 +31,8 @@ const config = {
     index: path.resolve(__dirname, 'src', 'js', 'index.js'),
     style: path.resolve(__dirname, 'src', 'css', 'style.css'),
     'editor-style': path.resolve(__dirname, 'src', 'css', 'editor-style.css')
+    // tailwind: path.resolve(__dirname, 'src', 'css', 'tailwind.css')
+
   },
 
   output: {

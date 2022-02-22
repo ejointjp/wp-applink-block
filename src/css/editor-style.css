@@ -1,3 +1,72 @@
-.test {
-  color: white;
+@tailwind components;
+@tailwind utilities;
+
+.wp-block-merihari-applink {
+  &-wrapper {
+    @apply bg-slate-100 rounded-md p-4 space-y-4;
+  }
+
+  &-control {
+    @apply sm:flex items-center;
+
+    .components-base-control__field {
+      @apply mb-0;
+    }
+  }
+
+  &-type {
+    @apply border-0 rounded;
+  }
+
+  &-input {
+    @apply p-2 rounded-md mt-2 sm:mt-0 sm:ml-3;
+  }
+
+  &-list {
+    @apply space-y-2 border-2 p-4 rounded-md bg-white overflow-y-scroll;
+
+    max-height: 48rem;
+  }
+
+  &-result-num {
+    @apply text-sm font-semibold;
+  }
+
+  &-item {
+    @apply flex items-center bg-slate-200/50 p-2.5 rounded;
+  }
+
+  &-icon {
+    @apply w-10 flex-shrink-0;
+
+    .wpalb-music-video & {
+      @apply w-16;
+
+      > img {
+        @apply aspect-16x9 object-cover;
+      }
+    }
+
+    > img {
+      @apply rounded-sm;
+    }
+  }
+
+  &-content {
+    @apply ml-2 mr-auto;
+  }
+
+  &-title {
+    @apply text-sm font-semibold w-full;
+  }
+
+  &-artist {
+    @apply text-xs text-gray-500 w-full;
+  }
+}
+
+.wpalb-software {
+  .wpalb-image {
+    border-radius: 24%;
+  }
 }
