@@ -1,11 +1,20 @@
-import { HiPlay } from 'react-icons/hi'
-
 import ReactLoading from 'react-loading'
-import { appAtts, macAppAtts, movieAtts, ebookAtts, podcastAtts, audiobookAtts, musicTrackAtts, musicAlbumAtts, musicVideoAtts } from './app-attributes'
+import Applink from './components/Applink'
 import entityOptions from './entity-options'
-import { StoreIcon } from './components/StoreIcon'
+import {
+  appAtts,
+  macAppAtts,
+  movieAtts,
+  ebookAtts,
+  podcastAtts,
+  audiobookAtts,
+  musicTrackAtts,
+  musicAlbumAtts,
+  musicVideoAtts
+} from './app-attributes'
+
 const { useBlockProps, PlainText, InspectorControls } = wp.blockEditor
-const { useState, useEffect, memo } = wp.element
+const { useState, useEffect } = wp.element
 const { PanelBody, SelectControl, BaseControl } = wp.components
 
 // PHPから取得した変数
@@ -82,36 +91,6 @@ const edit = (props) => {
   // アプリが登録されている場合
   const hasApp = Object.keys(app).length > 0
 
-  const ResultApp = memo(() => {
-    if (hasApp) {
-      return (
-        <div className={`wpalb wpalb-${app.type}`}>
-          <div className="wpalb-link">
-            <a className="wpalb-icon" href={app.url} target="_blank" rel="noopener noreferrer">
-              <img className="wpalb-img" src={app.iconUrl} />
-            </a>
-            <div className="wpalb-content">
-              <a className="wpalb-title" href={app.url} target="_blank" rel="noopener noreferrer">{app.title}</a>
-              <div className="wpalb-artist">{app.artist}</div>
-            </div>
-            {app.previewUrl && (
-              <a className="wpalb-audition wpalb-button" href={app.previewUrl} target="_blank" rel="noopener noreferrer">
-                <HiPlay />
-                <span className="wpalb-button-label">試聴</span>
-              </a>
-            )}
-            <a className="wpalb-store wpalb-button" href={app.url} target="_blank" rel="noopener noreferrer">
-              <StoreIcon type={app.type} />
-              {/* <span className="wpalb-button-label">App Store</span> */}
-            </a>
-          </div>
-        </div>
-      )
-    } else {
-      return <></>
-    }
-  })
-
   // 取得したデータの種類によって表示する内容を選別する
   const itemAtts = item => {
     if (item.kind === 'software') return appAtts(item)
@@ -126,44 +105,40 @@ const edit = (props) => {
     else return appAtts(item)
   }
 
-  const ResultList = memo(() => {
-    if (hasResult) {
-      const list = result.results.map((item, i) => {
-        const app = itemAtts(item)
+  const ResultList = () => {
+    const list = result.results.map((item, i) => {
+      const app = itemAtts(item)
 
-        return (
-          <div className={`wp-block-merihari-applink-item wpalb-${item.kind}`} key={i}>
-            <div className="wp-block-merihari-applink-icon">
-              <img className="wpalb-image" src={app.iconUrl} />
-            </div>
-            <div className="wp-block-merihari-applink-content">
-              <div className="wp-block-merihari-applink-title">{app.title}</div>
-              <div className="wp-block-merihari-applink-artist">{app.artist}</div>
-            </div>
-            <button
+      return (
+        <div className={`wp-block-merihari-applink-item wpalb-${item.kind}`} key={i}>
+          <div className="wp-block-merihari-applink-icon">
+            <img className="wpalb-image" src={app.iconUrl} />
+          </div>
+          <div className="wp-block-merihari-applink-content">
+            <div className="wp-block-merihari-applink-title">{app.title}</div>
+            <div className="wp-block-merihari-applink-artist">{app.artist}</div>
+          </div>
+          <button
               className="button"
               onClick={() => {
                 setAttributes({ app: app })
               }}
             >選択</button>
-          </div>
-        )
-      })
-
-      return (
-        <>
-          <div className="wp-block-merihari-applink-result-num">検索結果{result.resultCount} 件</div>
-          {result.resultCount > 0 && (
-            <div className="wp-block-merihari-applink-list">
-              {list}
-            </div>
-          )}
-        </>
+        </div>
       )
-    } else {
-      return <></>
-    }
-  })
+    })
+
+    return (
+      <>
+        <div className="wp-block-merihari-applink-result-num">検索結果{result.resultCount} 件</div>
+        {result.resultCount > 0 && (
+        <div className="wp-block-merihari-applink-list">
+          {list}
+        </div>
+        )}
+      </>
+    )
+  }
 
   const InfoText = (props) => {
     return <div className="text-sm text-gray-600 mt-2">{props.children}</div>
@@ -253,8 +228,8 @@ const edit = (props) => {
       </div>
 
       <Display />
-      <ResultApp />
-      <ResultList />
+      {hasApp && <Applink app={app} />}
+      {hasResult && <ResultList />}
 
     </div>
   )

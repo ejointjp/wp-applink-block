@@ -5,7 +5,7 @@
   /* @apply ; */
 
   &-link {
-    @apply flex items-center bg-slate-200/50 p-4 rounded-md;
+    @apply flex items-center bg-slate-200/50 dark:bg-zinc-700/50 p-4 rounded-md;
   }
 
   &-content {
@@ -18,10 +18,18 @@
     .wpalb-ebook & {
       @apply w-20;
     }
+
+    .wpalb-music-video & {
+      @apply w-24;
+
+      img {
+        @apply aspect-16x9;
+      }
+    }
   }
 
   &-img {
-    @apply rounded-md;
+    @apply rounded;
 
     .wpalb-app & {
       border-radius: 24%;
