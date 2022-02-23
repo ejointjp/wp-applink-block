@@ -2,10 +2,10 @@
 @tailwind utilities;
 
 .wpalb {
-  @apply bg-slate-200/50 p-4 rounded-md;
+  /* @apply ; */
 
   &-link {
-    @apply flex items-center text-inherit hover:text-inherit;
+    @apply flex items-center bg-slate-200/50 p-4 rounded-md;
   }
 
   &-content {
@@ -13,11 +13,15 @@
   }
 
   &-icon {
-    @apply w-16 flex-shrink-0 mr-4;
+    @apply w-16 flex-shrink-0 mr-4 text-inherit hover:text-inherit;
+
+    .wpalb-ebook & {
+      @apply w-20;
+    }
   }
 
   &-img {
-    @apply rounded-md border border-solid border-slate-100;
+    @apply rounded-md;
 
     .wpalb-app & {
       border-radius: 24%;
@@ -25,7 +29,7 @@
   }
 
   &-title {
-    @apply font-semibold;
+    @apply font-semibold text-inherit hover:text-inherit;
   }
 
   &-artist {
@@ -33,6 +37,45 @@
   }
 
   &-button {
-    @apply text-sm rounded-full bg-slate-700 text-white py-2 px-4;
+    @apply flex items-center space-x-1 rounded-full bg-slate-300/50  text-slate-600 hover:text-slate-700 py-1 px-3 hover:bg-slate-300;
+
+    transition: 0.2s;
+  }
+
+  &-audition {
+    @apply mr-2;
+  }
+
+  &-button-label {
+    @apply text-sm;
+  }
+}
+
+.wpalb-store {
+  @apply text-white hover:text-white;
+
+  :is(
+  .wpalb-app &,
+  .wpalb-mac-app &) {
+    @apply bg-blue-500 hover:bg-blue-400;
+  }
+
+  .wpalb-movie & {
+    @apply bg-zinc-700 hover:bg-zinc-600;
+  }
+
+  .wpalb-ebook & {
+    @apply bg-amber-500 hover:bg-amber-400;
+  }
+
+  .wpalb-podcast & {
+    @apply bg-violet-500 hover:bg-violet-400;
+  }
+
+  :is(
+  .wpalb-music-track &,
+  .wpalb-music-album &,
+  .wpalb-music-video &) {
+    @apply bg-rose-500 hover:bg-rose-400;
   }
 }

@@ -1,34 +1,48 @@
+import { HiPlay } from 'react-icons/hi'
+
 import ReactLoading from 'react-loading'
-import { appAtts, macAppAtts, movieAtts, podcastAtts, audiobookAtts, musicTrackAtts, musicAlbumAtts, musicVideoAtts } from './app-attributes'
+import { appAtts, macAppAtts, movieAtts, ebookAtts, podcastAtts, audiobookAtts, musicTrackAtts, musicAlbumAtts, musicVideoAtts } from './app-attributes'
 import entityOptions from './entity-options'
+import { StoreIcon } from './components/StoreIcon'
 const { useBlockProps, PlainText, InspectorControls } = wp.blockEditor
 const { useState, useEffect, memo } = wp.element
-const { Button, PanelBody, SelectControl, BaseControl, ToggleControl } = wp.components
+const { PanelBody, SelectControl, BaseControl } = wp.components
 
 // PHPから取得した変数
 // eslint-disable-next-line no-undef
-const { api, action, nonce } = wpalbAjaxValues
+const {
+  api,
+  action,
+  nonce,
+  options,
+  optionsPageUrl,
+  limitValues,
+  countryValues,
+  langValues
+// eslint-disable-next-line no-undef
+} = wpalbAjaxValues
 
 const edit = (props) => {
   const blockProps = useBlockProps({ className: 'wp-block-merihari-applink-wrapper' })
   const { attributes, setAttributes } = props
   const { app } = attributes
-
   const [result, setResult] = useState({})
   const [term, setTerm] = useState('')
   const [tempTerm, setTempTerm] = useState('')
   const [entity, setEntity] = useState('software')
   const [state, setState] = useState('')
-  const [limit, setLimit] = useState('10')
-  console.log('state', state)
+  const [limit, setLimit] = useState(options.limit || 10)
+  const [lang, setLang] = useState(options.lang || 'ja_JP')
+  const [country, setCountry] = useState(options.country || 'JP')
+
   const fetchData = async () => {
     const searchParams = new URLSearchParams()
-    searchParams.append('country', 'JP')
-    searchParams.append('lang', 'ja_JP')
+    searchParams.append('lang', lang)
+    searchParams.append('country', country)
     searchParams.append('entity', entity)
     searchParams.append('term', term)
     searchParams.append('limit', limit)
-    searchParams.append('at', '11l64V')
+    searchParams.append('at', options.token || '11l64V')
 
     const url = 'https://itunes.apple.com/search?' + searchParams.toString()
     const params = new URLSearchParams()
@@ -37,6 +51,7 @@ const edit = (props) => {
     params.append('url', url)
 
     setAttributes({ app: {} })
+    console.log('url', url)
 
     try {
       const res = await fetch(api, { method: 'post', body: params })
@@ -51,8 +66,6 @@ const edit = (props) => {
 
   // Termが変更されている場合はTermを更新
   const setTermIfChanged = () => {
-    // if (term === tempTerm) return
-    console.log('term---', term === tempTerm)
     setTerm(tempTerm)
   }
 
@@ -73,15 +86,25 @@ const edit = (props) => {
     if (hasApp) {
       return (
         <div className={`wpalb wpalb-${app.type}`}>
-          <a className="wpalb-link" href={app.url} target="_blank" rel="noopener">
-            <div className="wpalb-icon">
+          <div className="wpalb-link">
+            <a className="wpalb-icon" href={app.url} target="_blank" rel="noopener noreferrer">
               <img className="wpalb-img" src={app.iconUrl} />
-            </div>
+            </a>
             <div className="wpalb-content">
-              <div className="wpalb-title">{app.title}</div>
+              <a className="wpalb-title" href={app.url} target="_blank" rel="noopener noreferrer">{app.title}</a>
               <div className="wpalb-artist">{app.artist}</div>
             </div>
-          </a>
+            {app.previewUrl && (
+              <a className="wpalb-audition wpalb-button" href={app.previewUrl} target="_blank" rel="noopener noreferrer">
+                <HiPlay />
+                <span className="wpalb-button-label">試聴</span>
+              </a>
+            )}
+            <a className="wpalb-store wpalb-button" href={app.url} target="_blank" rel="noopener noreferrer">
+              <StoreIcon type={app.type} />
+              {/* <span className="wpalb-button-label">App Store</span> */}
+            </a>
+          </div>
         </div>
       )
     } else {
@@ -94,6 +117,7 @@ const edit = (props) => {
     if (item.kind === 'software') return appAtts(item)
     else if (item.kind === 'mac-software') return macAppAtts(item)
     else if (item.kind === 'feature-movie') return movieAtts(item)
+    else if (item.kind === 'ebook') return ebookAtts(item)
     else if (item.kind === 'podcast') return podcastAtts(item)
     else if (item.kind === 'song') return musicTrackAtts(item)
     else if (item.kind === 'music-video') return musicVideoAtts(item)
@@ -150,9 +174,6 @@ const edit = (props) => {
       case 'search':
         return <ReactLoading class="mt-2" type="spin" color="rgb(253 210 59)" width="20px" height="20px" />
 
-        // case 'result-success':
-        //   return <ResultList />
-
       case 'result-error':
         return <InfoText>データの取得に失敗しました</InfoText>
 
@@ -164,41 +185,48 @@ const edit = (props) => {
   useEffect(() => {
     if (term !== '') {
       setState('search')
+      setResult({})
       fetchData()
       console.log('fetchしました')
     } else {
       console.log('fetchしませんでした')
     }
-  }, [term, entity])
+  }, [term, entity, limit, lang, country])
 
   useEffect(() => {
     if (hasApp) setResult({})
   }, [app])
 
-  console.log('book')
-
   return (
     <div { ...blockProps }>
       <InspectorControls>
         <PanelBody
-          title={ 'ブロック設定' }
+          title="検索条件設定"
           className="wp-block-merihari-blogcard-inspector">
-          <BaseControl label="検索条件設定">
+          <BaseControl label="">
             <SelectControl
-            label=''
-            value={limit}
-            onChange={ (value) => setLimit(value)}
-            options={ [
-              { value: '', label: 'なし' },
-              { value: '_blank', label: '_blank (別ウインドウ・タブ)' },
-              { value: '_new', label: '_new (ひとつの別ウインドウ・タブ)' },
-              { value: '_self', label: '_self (同じウインドウ・タブ)' }
-            ] }
-          />
-          </BaseControl>
+              label='検索結果数'
+              value={limit}
+              onChange={ (value) => setLimit(value)}
+              options={limitValues}
+            />
 
-          <BaseControl label="キャッシュを削除">
-            <Button className="button" onClick="">キャッシュを削除</Button>
+            <SelectControl
+              label='検索対象ストア'
+              value={country}
+              onChange={ (value) => setCountry(value)}
+              options={countryValues}
+            />
+
+            <SelectControl
+              label='表示言語'
+              value={lang}
+              onChange={ (value) => setLang(value)}
+              options={langValues}
+            />
+
+            <p><a href={optionsPageUrl} target="_blank" rel="nofollow noreferrer noopener">設定ページでデフォルト値を設定する</a></p>
+
           </BaseControl>
         </PanelBody>
       </InspectorControls>
@@ -224,9 +252,9 @@ const edit = (props) => {
       />
       </div>
 
+      <Display />
       <ResultApp />
       <ResultList />
-      <Display />
 
     </div>
   )

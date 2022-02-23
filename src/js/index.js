@@ -5,7 +5,7 @@ const { registerBlockType } = wp.blocks
 
 registerBlockType('merihari/applink', {
   apiVersion: 2,
-  title: 'アプリリンク',
+  title: 'Applink',
   description: '',
   category: 'merihari',
   icon: 'instagram',
@@ -17,7 +17,9 @@ registerBlockType('merihari/applink', {
     'apple',
     'app',
     'embed',
-    'link'
+    'link',
+    'itunes',
+    'iTunes'
   ],
   attributes,
   edit,

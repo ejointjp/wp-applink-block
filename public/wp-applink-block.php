@@ -25,34 +25,57 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+namespace wpalb;
 
-// include_once plugin_dir_path(__FILE__) . 'inc/content.php';
-// include_once plugin_dir_path(__FILE__) . 'inc/return_json.php';
+include_once plugin_dir_path(__FILE__) . 'define.php';
+include plugin_dir_path(__FILE__) . 'admin-page.php';
 
+// プラグイン有効時に実行
+if (function_exists('register_activation_hook')) {
+  register_activation_hook(__FILE__, 'wpalb\register_activation');
+}
 
-// 初期設定
-if (!function_exists('wpalb_init')) {
-  function wpalb_init()
-  {
-    // Main JS
-    wp_register_script(
-      'wp-applink-block-editor',
-      plugins_url('dist/index.js', __FILE__),
-      [],
-      '',
-      true
-    );
-    // wp_set_script_translations('wp-applink-block-editor', 'wp-applink-block-blocks');
-
-    // エディタ用CSS
-    wp_register_style(
-      'wp-applink-block-editor',
-      plugins_url('dist/editor-style.css', __FILE__),
-      [],
-      '',
-      'all'
+// オプション値の初期化
+function register_activation()
+{
+  $options = get_option('wpalb-setting');
+  var_dump($options);
+  if (!$options) {
+    $default = array(
+      'token' => '11l64V',
+      'country' => 'JP',
+      'lang' => 'ja_jp'
     );
 
+    update_option('wpalb-setting', $default);
+  }
+}
+
+// ブロックを登録
+function register_block()
+{
+
+  // Main JS
+  wp_register_script(
+    'wp-applink-block-editor',
+    plugins_url('dist/index.js', __FILE__),
+    [],
+    '',
+    true
+  );
+  // wp_set_script_translations('wp-applink-block-editor', 'wp-applink-block-blocks');
+
+  // エディタ用CSS
+  wp_register_style(
+    'wp-applink-block-editor',
+    plugins_url('dist/editor-style.css', __FILE__),
+    [],
+    '',
+    'all'
+  );
+
+  $options = get_option('wpalb-setting');
+  if (!isset($options['nocss'])) {
     // フロント・エディタ両方用CSS
     wp_register_style(
       'wp-applink-block',
@@ -61,16 +84,16 @@ if (!function_exists('wpalb_init')) {
       '',
       'all'
     );
-
-    // ブロックを登録
-    register_block_type('merihari/applink', array(
-      'editor_script' => 'wp-applink-block-editor',
-      'editor_style'  => 'wp-applink-block-editor',
-      'style'         => 'wp-applink-block'
-    ));
   }
+
+  // ブロックを登録
+  register_block_type('merihari/applink', array(
+    'editor_script' => 'wp-applink-block-editor',
+    'editor_style'  => 'wp-applink-block-editor',
+    'style'         => 'wp-applink-block'
+  ));
 }
-add_action('init', 'wpalb_init');
+add_action('init', 'wpalb\register_block');
 
 // ブロックのカテゴリー登録
 if (!function_exists('merihari_categories')) {
@@ -87,14 +110,14 @@ if (!function_exists('merihari_categories')) {
     );
   }
   if (class_exists('WP_Block_Editor_Context')) {
-    add_filter('block_categories_all', 'merihari_categories', 10, 2);
+    add_filter('block_categories_all', 'wpalb\merihari_categories', 10, 2);
   } else {
-    add_filter('block_categories', 'merihari_categories', 10, 2);
+    add_filter('block_categories', 'wpalb\merihari_categories', 10, 2);
   }
 }
 
 
-function wpalb_admin_enqueue_scripts()
+function admin_enqueue_scripts()
 {
   /**
    * PHPで生成した値をJavaScriptに渡す
@@ -110,16 +133,19 @@ function wpalb_admin_enqueue_scripts()
       'api' => admin_url('admin-ajax.php'),
       'action' => 'wpalb-action',
       'nonce' => wp_create_nonce('wpalb-ajax'),
-      'actionRemoveCache' => 'wpalb-action-remove-cache', // cache削除用
-      'nonceRemoveCache' => wp_create_nonce('wpalb-ajax-remove-cache') // cache削除用
+      'optionsPageUrl' => admin_url('options-general.php?page=wpalb-setting'),
+      'options' => get_option('wpalb-setting'),
+      'limitValues' => WPALB_LIMIT_VALUES,
+      'countryValues' => WPALB_COUNTRY_VALUES,
+      'langValues' => WPALB_LANG_VALUES
     ]
   );
 }
-add_action('admin_enqueue_scripts', 'wpalb_admin_enqueue_scripts');
+add_action('admin_enqueue_scripts', 'wpalb\admin_enqueue_scripts');
 
 
 // Ajaxで返す値
-function wpalb_ajax()
+function ajax()
 {
   if (wp_verify_nonce($_POST['nonce'], 'wpalb-ajax')) {
 
@@ -128,4 +154,4 @@ function wpalb_ajax()
     die();
   }
 }
-add_action('wp_ajax_wpalb-action', 'wpalb_ajax');
+add_action('wp_ajax_wpalb-action', 'wpalb\ajax');

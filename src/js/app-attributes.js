@@ -33,6 +33,19 @@ export const movieAtts = item => {
   }
 }
 
+export const ebookAtts = item => {
+  return {
+    id: item.trackId,
+    type: 'ebook',
+    title: item.trackCensoredName || item.trackName,
+    url: item.trackViewUrl,
+    artist: item.artistName,
+    iconUrl: item.artworkUrl100 || item.artworkUrl512 || item.artworkUrl60 || item.artworkUrl30,
+    previewUrl: item.previewUrl
+
+  }
+}
+
 export const podcastAtts = item => {
   return {
     id: item.trackId,

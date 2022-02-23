@@ -16,16 +16,16 @@ export default [
     label: 'ムービー'
   },
   {
+    value: 'ebook',
+    label: 'ブック'
+  },
+  {
     value: 'audiobook',
     label: 'オーディオブック'
   },
   {
     value: 'podcast',
     label: 'Podcast'
-  },
-  {
-    value: 'ebook',
-    label: 'ブック'
   },
   {
     value: 'musicTrack',
