@@ -1,0 +1,2 @@
+window.onload=function(){document.querySelectorAll(".wpalb-button svg").forEach((function(l){var e=l.outerHTML.replaceAll("cliprule","clip-rule").replaceAll("fillrule","fill-rule").replaceAll("strokelinecap","stroke-linecap").replaceAll("strokelinejoin","stroke-linejoin").replaceAll("strokewidth","stroke-width");console.log(e),l.outerHTML=e}))};
+//# sourceMappingURL=front.js.map

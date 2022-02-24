@@ -28,7 +28,8 @@ const config = {
   },
 
   entry: {
-    index: path.resolve(__dirname, 'src', 'js', 'index.js'),
+    front: path.resolve(__dirname, 'src', 'js', 'front.js'),
+    block: path.resolve(__dirname, 'src', 'js', 'block.js'),
     style: path.resolve(__dirname, 'src', 'css', 'style.css'),
     'editor-style': path.resolve(__dirname, 'src', 'css', 'editor-style.css')
     // tailwind: path.resolve(__dirname, 'src', 'css', 'tailwind.css')

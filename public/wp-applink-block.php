@@ -58,7 +58,16 @@ function register_block()
   // Main JS
   wp_register_script(
     'wp-applink-block-editor',
-    plugins_url('dist/index.js', __FILE__),
+    plugins_url('dist/block.js', __FILE__),
+    ['wp-element', 'wp-block-editor', 'wp-blocks', 'wp-components'],
+    '',
+    true
+  );
+
+  // JS for frontend
+  wp_register_script(
+    'wp-applink-block',
+    plugins_url('dist/front.js', __FILE__),
     [],
     '',
     true
@@ -88,9 +97,10 @@ function register_block()
 
   // ブロックを登録
   register_block_type('merihari/applink', array(
+    'script' => 'wp-applink-block',
     'editor_script' => 'wp-applink-block-editor',
-    'editor_style'  => 'wp-applink-block-editor',
-    'style'         => 'wp-applink-block'
+    'style'         => 'wp-applink-block',
+    'editor_style'  => 'wp-applink-block-editor'
   ));
 }
 add_action('init', 'wpalb\register_block');
