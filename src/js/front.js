@@ -1,16 +1,7 @@
-window.onload = () => {
+window.addEventListener('load', () => {
   // save時に React SVGのプロパティ名のハイフンがなくなる問題を修正
-  // const svgIcons = document.querySelectorAll('.wpalb-button svg')
-  // console.log(svgIcons)
-  // svgIcons.forEach(item => {
-  //   const strokeWidth = item.getAttribute('strokewidth')
-  //   if (strokeWidth !== undefined) item.setAttribute('stroke-width', strokeWidth)
-
-  //   // const fillRule = item.getAttribute('fillrule')
-  //   // if (fillRule !== undefined) item.setAttribute('fill-rule', fillRule)
-  // })
-
   const buttons = document.querySelectorAll('.wpalb-button svg')
+  console.log('buttons:', buttons)
 
   buttons.forEach(item => {
     const replacedHtml = item.outerHTML
@@ -19,7 +10,7 @@ window.onload = () => {
       .replaceAll('strokelinecap', 'stroke-linecap')
       .replaceAll('strokelinejoin', 'stroke-linejoin')
       .replaceAll('strokewidth', 'stroke-width')
-    console.log(replacedHtml)
+    console.log('replacedHtml:', replacedHtml)
     item.outerHTML = replacedHtml
   })
-}
+})
