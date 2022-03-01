@@ -119,11 +119,7 @@ if (!function_exists('merihari_categories')) {
       )
     );
   }
-  if (class_exists('WP_Block_Editor_Context')) {
-    add_filter('block_categories_all', 'wpalb\merihari_categories', 10, 2);
-  } else {
-    add_filter('block_categories', 'wpalb\merihari_categories', 10, 2);
-  }
+  add_filter('block_categories_all', 'wpalb\merihari_categories', 10, 2);
 }
 
 
