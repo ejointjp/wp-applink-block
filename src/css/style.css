@@ -5,47 +5,47 @@
   /* @apply ; */
 
   &-link {
-    @apply flex items-center bg-slate-200/50 dark:bg-zinc-700/50 p-4 rounded-md;
+    @apply flex sm:items-center bg-slate-200/50 dark:bg-zinc-700/50 p-4 rounded-md;
   }
 
   &-content {
-    @apply mr-auto;
+    @apply sm:flex sm:flex-grow sm:justify-between;
   }
 
   &-icon {
-    @apply w-16 flex-shrink-0 mr-4 text-inherit hover:text-inherit;
-
-    .wpalb-ebook & {
-      @apply w-20;
-    }
-
-    .wpalb-music-video & {
-      @apply w-24;
-
-      img {
-        @apply aspect-16x9;
-      }
-    }
+    @apply flex-shrink-0 mr-4 text-inherit hover:text-inherit;
   }
 
   &-img {
-    @apply rounded;
+    @apply rounded w-20 object-cover;
 
     .wpalb-app & {
       border-radius: 24%;
     }
+
+    .wpalb-music-video & {
+      @apply w-28 aspect-16x9;
+    }
+  }
+
+  &-data {
+    @apply mr-4;
   }
 
   &-title {
-    @apply font-semibold text-inherit hover:text-inherit;
+    @apply font-semibold text-inherit hover:text-inherit line-clamp-2;
   }
 
   &-artist {
     @apply mt-0.5 text-sm text-gray-500;
   }
 
+  &-buttons {
+    @apply sm:flex-shrink-0 mt-2 sm:mt-0 sm:flex items-center;
+  }
+
   &-button {
-    @apply flex items-center space-x-1 rounded-full bg-slate-200  text-slate-600 hover:text-slate-700 py-1 px-3 hover:bg-slate-300;
+    @apply flex-shrink-0 inline-flex items-center my-1 rounded-full bg-slate-200  text-slate-600 hover:text-slate-700 py-1 px-3 hover:bg-slate-300;
 
     transition: 0.2s;
   }
@@ -55,7 +55,7 @@
   }
 
   &-button-label {
-    @apply text-sm;
+    @apply text-xs sm:text-sm ml-0.5;
   }
 }
 
