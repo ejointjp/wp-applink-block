@@ -27,11 +27,14 @@ License: GPL2
 
 namespace wpalb;
 
+define('WPALB_ASSETS_CACHE', '2022-03-03 00:13');
+
 include_once plugin_dir_path(__FILE__) . 'define.php';
 include plugin_dir_path(__FILE__) . 'admin-page.php';
 
+
 // プラグイン有効時に実行
-if (function_exists('register_activation_hook')) {
+if (function_exists('wpalb\register_activation_hook')) {
   register_activation_hook(__FILE__, 'wpalb\register_activation');
 }
 
@@ -51,16 +54,35 @@ function register_activation()
   }
 }
 
-// ブロックを登録
+/**
+ * TailwindCSS
+ */
+add_action('wp_enqueue_scripts', 'wpalb\tailwindcss');
+add_action('enqueue_block_editor_assets', 'wpalb\tailwindcss');
+function tailwindcss()
+{
+  // TainwindCSS Base
+  wp_register_style(
+    'merihari-tailwind-base',
+    plugins_url('dist/tailwind-base.css', __FILE__),
+    WPALB_ASSETS_CACHE,
+    '',
+    'all'
+  );
+}
+
+
+/**
+ * ブロックを登録
+ */
 function register_block()
 {
-
   // Main JS
   wp_register_script(
     'wp-applink-block-editor',
     plugins_url('dist/block.js', __FILE__),
     ['wp-element', 'wp-block-editor', 'wp-blocks', 'wp-components'],
-    '',
+    WPALB_ASSETS_CACHE,
     true
   );
 
@@ -69,7 +91,7 @@ function register_block()
     'wp-applink-block',
     plugins_url('dist/front.js', __FILE__),
     [],
-    '',
+    WPALB_ASSETS_CACHE,
     true
   );
   // wp_set_script_translations('wp-applink-block-editor', 'wp-applink-block-blocks');
@@ -78,8 +100,8 @@ function register_block()
   wp_register_style(
     'wp-applink-block-editor',
     plugins_url('dist/editor-style.css', __FILE__),
-    [],
-    '',
+    ['merihari-tailwind-base'],
+    WPALB_ASSETS_CACHE,
     'all'
   );
 
@@ -89,8 +111,8 @@ function register_block()
     wp_register_style(
       'wp-applink-block',
       plugins_url('dist/style.css', __FILE__),
-      [],
-      '',
+      ['merihari-tailwind-base'],
+      WPALB_ASSETS_CACHE,
       'all'
     );
   }

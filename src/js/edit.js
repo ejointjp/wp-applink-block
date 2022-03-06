@@ -60,7 +60,6 @@ const edit = (props) => {
     params.append('url', url)
 
     setAttributes({ app: {} })
-    console.log('url', url)
 
     try {
       const res = await fetch(api, { method: 'post', body: params })
@@ -162,9 +161,6 @@ const edit = (props) => {
       setState('search')
       setResult({})
       fetchData()
-      console.log('fetchしました')
-    } else {
-      console.log('fetchしませんでした')
     }
   }, [term, entity, limit, lang, country])
 
