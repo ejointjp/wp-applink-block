@@ -57,8 +57,8 @@ function register_activation()
 /**
  * TailwindCSS
  */
-add_action('wp_enqueue_scripts', 'wpalb\tailwindcss');
-add_action('enqueue_block_editor_assets', 'wpalb\tailwindcss');
+add_action('wp_enqueue_scripts', 'wpalb\tailwindcss', 20);
+add_action('enqueue_block_editor_assets', 'wpalb\tailwindcss', 20);
 function tailwindcss()
 {
   // TainwindCSS Base

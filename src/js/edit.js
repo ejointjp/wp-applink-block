@@ -216,7 +216,7 @@ const edit = (props) => {
         <PlainText
         className='wp-block-merihari-applink-input'
         tagName='input'
-        placeholder='URLを入力してEnter'
+        placeholder='検索ワードを入力してEnter'
         value={ tempTerm }
         onChange={ (value) => setTempTerm(value) }
         onKeyPress={onKeyPress}
