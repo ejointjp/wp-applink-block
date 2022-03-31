@@ -27,7 +27,7 @@ License: GPL2
 
 namespace wpalb;
 
-define('WPALB_ASSETS_CACHE', '2022-03-03 00:13');
+define('WPALB_ASSETS_CACHE', '2022-03-28 08:36');
 
 include_once plugin_dir_path(__FILE__) . 'define.php';
 include plugin_dir_path(__FILE__) . 'admin-page.php';
